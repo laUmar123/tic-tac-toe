@@ -3,7 +3,9 @@
 :root {
     --background-color: #155e75;
     --box-shadow-generic: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-    --letter-o-color: #fa8500
+    --letter-o-color: #fa8500;
+    --letter-x-color: #40C0E7;
+    --standout-background-color: #196f8a;
 }
 
 * {
@@ -14,12 +16,45 @@
     color: white;
 }
 
+.home-container,
+.page-container {
+    background-color: var(--background-color);
+    height: 100vh;
+    width: 100vw;
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem
+}
+
+.home-container h1 {
+    font-size: 9rem;
+}
+
+button img {
+    height: 2rem;
+    width: 2rem;
+}
+
+img[src="robot.png"] {
+    transform: translateY(-5%);
+}
+
+.home-buttons {
+    display: flex;
+    gap: 3rem;
+}
+
 .page-container {
     height: 100vh;
     width: 100vw;
     background-color: var(--background-color);
     display: grid;
-    grid-template-rows: 0.8fr 4fr 0.5fr;
+    grid-template-rows: 0.8fr 2fr 1fr 0.5fr;
 }
 
 header {
@@ -41,8 +76,14 @@ header {
 }
 
 .player-turn {
-    width: 9rem;
+    width: 10rem;
     font-size: 2rem;
+}
+
+.player-turn>img {
+    height: 50px;
+    width: 50px;
+    margin-right: 0.3rem;
 }
 
 .restart-button {
@@ -50,7 +91,9 @@ header {
     cursor: pointer;
 }
 
-.restart-button:active {
+.restart-button:active,
+.quit-btn:active,
+.next-round-btn:active {
     background-color: var(--letter-o-color);
     box-shadow: 0 5px #666;
     transform: translateY(4px);
@@ -58,4 +101,170 @@ header {
 
 .restart-button:hover {
     background-color: var(--letter-o-color)
+}
+
+main {
+    grid-row: 2;
+    justify-self: center;
+    align-self: center;
+}
+
+.gameboard {
+    box-sizing: content-box;
+    display: flex;
+    height: 450px;
+    width: 450px;
+    flex-wrap: wrap;
+}
+
+.cell {
+    min-height: 150px;
+    max-height: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    border: 1px solid black;
+}
+
+.cell:nth-child(1),
+.cell:nth-child(2),
+.cell:nth-child(3) {
+    border-top: none;
+}
+
+.cell:nth-child(3n-2) {
+    border-left: none;
+}
+
+.cell:nth-child(3n) {
+    border-right: none;
+}
+
+#cell-5~div {
+    border-bottom: none;
+}
+
+.X {
+    background-image: url('letter-x.svg');
+    background-size: 100px 200px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.O {
+    background-image: url('letter-o.svg');
+    background-size: 100px 200px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.scoreboard {
+    grid-row: 3;
+    justify-self: center;
+    align-self: center;
+    display: flex;
+    gap: 3rem;
+}
+
+.score {
+    border-radius: 20px;
+    height: 4rem;
+    width: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    box-shadow: var(--box-shadow-generic);
+}
+
+.player-x-score {
+    background-color: var(--letter-x-color);
+}
+
+.tie-score {
+    background-color: var(--standout-background-color);
+}
+
+.player-o-score {
+    background-color: var(--letter-o-color);
+}
+
+.result-popup {
+    width: 100%;
+    position: absolute;
+    bottom: 35rem;
+    height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    background-color: var(--background-color);
+}
+
+.result-popup img {
+    height: 3rem;
+    width: 3rem;
+}
+
+.round-winner {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    gap: 1rem;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    height: 4rem;
+    width: 100%;
+    gap: 3rem;
+}
+
+.quit-btn,
+.next-round-btn,
+.ai-bot-btn,
+.two-player-btn {
+    width: 9.5rem;
+    height: 3.5rem;
+    border-radius: 20px;
+    font-weight: bold;
+    color: black;
+    border: none;
+    font-size: 1.1rem;
+    box-shadow: var(--box-shadow-generic);
+    cursor: pointer;
+}
+
+.ai-bot-btn,
+.two-player-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 11rem;
+    font-size: 1.3rem;
+}
+
+.quit-btn {
+    background-color: var(--letter-x-color);
+}
+
+.next-round-btn {
+    background-color: var(--letter-x-color);
+}
+
+.darken-background {
+    filter: brightness(50%);
+}
+
+.hide {
+    display: none;
+}
+
+.winning-background-color {
+    background-color: green;
 }
