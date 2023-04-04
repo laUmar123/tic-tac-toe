@@ -45,3 +45,38 @@ function displayGamePageTwoPlayers() {
     startGameTwoPlayers();
 };
 
+/**
+ * Updates the game score display to show 0 for player X, tie score and player O
+ */
+function updateGameScore() {
+    xScore.innerHTML = 0;
+    tieScore.innerHTML = 0;
+    oScore.innerHTML = 0;
+};
+
+/**
+ * clears the tic-tac-toe board so the all X's and O's are removed from the board
+ */
+function clearBoardDisplay() {
+    cells.forEach(individualCell => {
+        if (individualCell.classList.contains('X')) individualCell.classList.remove('X');
+        if (individualCell.classList.contains('O')) individualCell.classList.remove('O');
+    });
+};
+
+/**
+ * changes the active user symbol on top of the page to the specified path
+ * @param {string} path 
+ */
+async function setActivePlayer(path) {
+    activePlayerSymbol.src = await path;
+};
+
+/**
+ * removes the gamePage screen and shows the homepage
+ */
+function displayHomePage() {
+    homePage.classList.toggle('hide');
+    gamePage.classList.toggle('hide');
+};
+
