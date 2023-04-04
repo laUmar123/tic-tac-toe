@@ -80,3 +80,52 @@ function displayHomePage() {
     gamePage.classList.toggle('hide');
 };
 
+/**
+ * Displays the result pop up after a round has been completed, showings a description of what the outcome of the round is
+ * @param {object} player passed as an argument so the correct player is shown if they win the round
+ */
+function displayResultPopup(player) {
+    const message = document.querySelector('.round-information');
+    if (resultPopup.classList.contains('hide')) resultPopup.classList.toggle('hide'); //if the result popup is hidden then we want to remove the hide class from it
+    message.innerHTML = `${player.getName()} TAKES THE ROUND`; //shows the correct player that won the round
+    player.incrementScore(); //increments the player's score by 1
+    if (player === user1) xScore.innerHTML = player.getScore(); //updates 'player-x' display
+    else if (player === user2 || player === user3) oScore.innerHTML = player.getScore(); //updates the 'player-O/Computer' score
+    gamePage.classList.add('darken-background');
+};
+
+/**
+ * removes the result popup message and removes the background color from the winning cells
+ */
+function removeResultsPopup() {
+    if (!resultPopup.classList.contains('hide')) resultPopup.classList.toggle('hide');
+    if (gamePage.classList.contains('darken-background')) gamePage.classList.toggle('darken-background');
+    cells.forEach(individualCell => {
+        if (individualCell.classList.contains('winning-background-color')) individualCell.classList.remove('winning-background-color');
+    });
+};
+
+/**
+ * removes any result popup, clears the tic-tac-toe board, resets all scores and takes the user to the home screen
+ */
+function quitGame() {
+    removeResultsPopup();
+    clearBoardDisplay();
+    user1.resetScore();
+    user2.resetScore();
+    user3.resetScore();
+    displayHomePage();
+};
+
+/**
+ * starts the game again and resets the scores of users and updates the display
+ */
+function restartGame() {
+    startGame(); //resets the array that stores values of each cell so no need to do this here
+    user1.resetScore();
+    user2.resetScore();
+    user3.resetScore();
+    updateGameScore();
+};
+
+
