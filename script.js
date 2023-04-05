@@ -128,4 +128,46 @@ function restartGame() {
     updateGameScore();
 };
 
+/**
+ * Logic for what should happen in the AI mode of the game, adds an 'X' on the cell the user clicked and then generates a spot for the bot
+ * @param {object} event object that contains information of the element the user's click event
+ */
+function cellClick(event) {
+    if (Number.isFinite(cellValues[event.target.dataset.cell])) { //if the cell the user clicked on has a number, it means the cell hasn't been clicked on before and so it is a valid cell
+        clickResult(event.target.dataset.cell, user1); //adds 'X' symbol on that cell
+        if (!checkIfWon(cellValues, user1) && !checkTie()) clickResult(bestSpot(), user2); //checks if the game is not over, and then generates a spot for the bot
+    }
+};
+
+/**
+ * Logic for the two player version of the game, where each user chooses a cell and their turns keep switching
+ * @param {object} event 
+ */
+function cellClickTwoPlayers(event) {
+    if (emptyCells().length === 9) activePlayer = user1; //if the length of cellValues is 9 it means this is the start of the game, and so user1 should always be the active player at the start
+    if (Number.isFinite(cellValues[event.target.dataset.cell])) {
+        clickResult(event.target.dataset.cell, activePlayer);
+        if (activePlayer === user1) {
+            activePlayer = user3;
+            activePlayerSymbol.src = 'letter-o.svg'
+        } else {
+            activePlayer = user1;
+            activePlayerSymbol.src = 'letter-x.svg'
+        }
+    }
+};
+
+/**
+ * this function places the correct symbol on the cell and checks if the game is won or tied after placing the symbol.
+ * @param {number} cellNum the number of the index of the cell that the user clicked on, this value is taken from the data-cell value attached to each div
+ * @param {object} player the object of the player who clicked the cell
+ */
+function clickResult(cellNum, player) {
+    cellValues[cellNum] = player.getSymbol();
+    document.getElementById(`cell-${cellNum}`).classList.add(`${player.getSymbol()}`);
+    let gameisWon = checkIfWon(cellValues, player);
+    if (gameisWon) gameOver(gameisWon);
+    if (checkTie()) gameTie();
+};
+
 
