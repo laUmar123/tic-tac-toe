@@ -170,4 +170,37 @@ function clickResult(cellNum, player) {
     if (checkTie()) gameTie();
 };
 
+/**
+ * adds the correct call back function to each cell to each cell and clears the board
+ * @param {function} clickLogic the call back function that will be used to specify what happens when setting the initial game up
+ */
+function logic(clickLogic) {
+    cells.forEach(individualCell => {
+        clearBoardDisplay();
+        individualCell.addEventListener('click', clickLogic);
+    });
+};
+
+/**
+ * this function is called when resetting or going into the different modes, it sets everything up by default for the ai mode
+ */
+function startGame() {
+    removeResultsPopup();
+    cellValues = [0, 1, 2, 3, 4, 5, 6, 7, 8]; //resets cellValues
+    // activePlayer = user1;
+    logic(cellClick);
+    activePlayerSymbol.src = 'letter-x.svg';
+};
+
+/**
+ * this function is called when resetting or going into the different modes, it sets everything up by default for the two players mode
+ */
+function startGameTwoPlayers() {
+    removeResultsPopup();
+    cellValues = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    cells.forEach(individualCell => {
+        clearBoardDisplay();
+        individualCell.addEventListener('click', cellClickTwoPlayers);
+    });
+};
 
