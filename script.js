@@ -198,9 +198,60 @@ function startGame() {
 function startGameTwoPlayers() {
     removeResultsPopup();
     cellValues = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    cells.forEach(individualCell => {
-        clearBoardDisplay();
-        individualCell.addEventListener('click', cellClickTwoPlayers);
-    });
+    logic(cellClickTwoPlayers);
 };
 
+/**
+ * checks if a certain user has won the game
+ * @param {array} boardValues an array of the state of each cell
+ * @param {object} player an object of the player that clicked the cell
+ * @returns null if no one won or an object of the index of the winning cells and the player who won.
+ */
+function checkIfWon(boardValues, player) {
+    //finds every index the player has played in and places it into an array
+    let plays = boardValues.reduce((arr, cellValue, i) => (cellValue === player.getSymbol()) ? arr.concat(i) : arr, []);
+    let gameIsWon = null;
+    for (let [index, value] of winningCombos.entries()) {
+        if (value.every(element => plays.indexOf(element) > -1)) { //checks if the elements stored in plays match that of the winningCombos array
+            gameIsWon = { index, player }; //index stores the index of the element that matches the winning sequence, so we can target that index specifically
+            break;
+        }
+    }
+    return gameIsWon;
+};
+
+/**
+ * this function is called after someone wins the round, and it colors the winning cells and gives a popup, while also removing the cellClick event listener from each cell
+ * @param {object} gameWon this is the object returned from the checkIfWon function 
+ */
+function gameOver(gameWon) {
+    for (let index of winningCombos[gameWon.index]) {
+        document.getElementById(`cell-${index}`).classList.toggle('winning-background-color');
+    };
+    displayResultPopup(gameWon.player);
+    cells.forEach(individualCell => individualCell.removeEventListener('click', cellClick)); //removed incase the user goes from the AI mode to the two players mode
+};
+
+/**
+ * the function called if there is a tie round, so a different popup is displayed and the tiescore is incremented
+ */
+function gameTie() {
+    const message = document.querySelector('.round-information');
+    if (resultPopup.classList.contains('hide')) resultPopup.classList.toggle('hide');
+    message.innerHTML = `TIE ROUND`;
+    tieScore.innerHTML = Number(tieScore.innerHTML) + 1;
+    gamePage.classList.add('darken-background');
+    cells.forEach(individualCell => individualCell.removeEventListener('click', cellClick));
+};
+
+/**
+ * checks if there is a tie by checking if the number of empty cells is 0
+ * @returns a boolean value based on whether there is a tie or not
+ */
+function checkTie() {
+    if (emptyCells().length === 0) {
+        cells.forEach(individualCell => individualCell.removeEventListener('click', cellClick));
+        return true;
+    }
+    return false;
+};
