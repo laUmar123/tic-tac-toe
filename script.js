@@ -340,3 +340,29 @@ function minmax(newCellValues, player) {
     //returns the object that was chosen as the best move
     return moves[bestMove];
 };
+
+const Player = (name, symbol) => {
+    const userName = name;
+    const userSymbol = symbol;
+    let userScore = 0;
+    const incrementScore = () => userScore++;
+    const getScore = () => userScore;
+    const resetScore = () => userScore = 0;
+    const getSymbol = () => userSymbol;
+    const getName = () => userName;
+    return { getSymbol, getName, incrementScore, getScore, resetScore }
+};
+
+const user1 = Player('PLAYER X', 'X');
+const user2 = Player('COMPUTER', 'O');
+const user3 = Player('PLAYER O', 'O');
+
+let activePlayer = user1;
+
+const DisplayController = (() => {
+    aiBtn.addEventListener('click', displayGamePage);
+    nextRountBtn.addEventListener('click', startGame);
+    quitBtn.addEventListener('click', quitGame);
+    restartBtn.addEventListener('click', restartGame);
+    twoPlayersBtn.addEventListener('click', displayGamePageTwoPlayers);
+})();
