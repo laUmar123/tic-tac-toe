@@ -255,3 +255,88 @@ function checkTie() {
     }
     return false;
 };
+
+/**
+ * checks the each cell and places the empty cells into an array 
+ * @returns an array that contains all the empty cells
+ */
+function emptyCells() {
+    let arrEmptyCells = [];
+    for (let [index, value] of cellValues.entries()) {
+        if (Number.isFinite(value)) arrEmptyCells.push(index);
+    };
+    return arrEmptyCells;
+};
+
+/**
+ * calls the index property from the minmax function
+ * @returns the value of the index property from the minmax function
+ */
+function bestSpot() {
+    return minmax(cellValues, user2).index;
+};
+
+/**
+ * recursive function that retrieves the best move based on playing each situation after a certain move
+ * @param {array} newBoard an array of the values of each cell
+ * @param {object} player object that contains information about the player
+ * @returns an object that contains the best move
+ */
+function minmax(newCellValues, player) {
+    //finds all the empty cells on the board
+    let availableCells = emptyCells(newCellValues);
+
+    //base cases to check if there is a tie or if anyone won
+    if (checkIfWon(newCellValues, user1)) {
+        return { score: -10 }; //if the player wins score is -10
+    } else if (checkIfWon(newCellValues, user2)) {
+        return { score: 10 }; //if computer wins then 10
+    } else if (availableCells.length === 0) {
+        return { score: 0 } //if tie then 0
+    }
+
+
+    let moves = [];
+    for (let i = 0; i < availableCells.length; i++) { //loops through empty cells
+        let move = {}; //stores each empty cell index
+        move.index = newCellValues[availableCells[i]];
+        newCellValues[availableCells[i]] = player.getSymbol(); //adds the symbol to the empty cell
+
+        if (player == user2) {
+            let result = minmax(newCellValues, user1); //recursively call minmax to get the score property
+            move.score = result.score;
+        } else {
+            let result = minmax(newCellValues, user2);
+            move.score = result.score;
+        }
+
+        //once terminal state is found then push index into the array
+        newCellValues[availableCells[i]] = move.index;
+        moves.push(move); //stores each possible move
+    }
+
+
+    let bestMove;
+    //choose the highest score in the array for the computer
+    if (player === user2) {
+        let bestScore = -10000;
+        for (let i = 0; i < moves.length; i++) {
+            if (moves[i].score > bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    } else {
+        //chooses the worst rated move for the user
+        let bestScore = 10000;
+        for (let i = 0; i < moves.length; i++) {
+            if (moves[i].score < bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+
+    //returns the object that was chosen as the best move
+    return moves[bestMove];
+};
